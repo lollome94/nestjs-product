@@ -1,150 +1,83 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# products-service
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend NestJS + Sequelize (MySQL) per gestire prodotti.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Cosa fa
 
-## Description
+- CRUD prodotti
+- paginazione su lista prodotti
+- validazione input (class-validator)
+- errori HTTP chiari (400, 404, 409)
+- test unit, integration, e2e
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Setup veloce
 
-## Agentic Clean Architecture (NestJS)
-
-This repository now includes a NestJS-focused adaptation of Agentic Clean Architecture with DDD, explicit error handling, logging and performance guidance, Sequelize persistence boundaries, and Testcontainers testing patterns.
-
-- Main guide: [docs/agentic-clean-architecture-nestjs.md](docs/agentic-clean-architecture-nestjs.md)
-- Skills:
-  - [.github/skills/nestjs-architecture-overview/SKILL.md](.github/skills/nestjs-architecture-overview/SKILL.md)
-  - [.github/skills/nestjs-error-logging-performance/SKILL.md](.github/skills/nestjs-error-logging-performance/SKILL.md)
-  - [.github/skills/nestjs-sequelize-persistence/SKILL.md](.github/skills/nestjs-sequelize-persistence/SKILL.md)
-  - [.github/skills/nestjs-testing-testcontainers/SKILL.md](.github/skills/nestjs-testing-testcontainers/SKILL.md)
-
-## Project setup
+1. Installa dipendenze
 
 ```bash
-$ npm install
+npm install
 ```
 
-## Compile and run the project
+2. Crea il file `.env` partendo da `.env.example`
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+copy .env.example .env
 ```
 
-## Run tests
+3. Avvia MySQL e crea il database `ecommerce`
+
+4. Esegui migration
 
 ```bash
-# unit tests
-$ npm run test
-
-# integration tests (Testcontainers + MySQL reale)
-$ npm run test:integration
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-
-# full test suite
-$ npm run test:all
+npm run db:migrate
 ```
 
-## Load test with k6 on Docker image
-
-The repository includes a full load-test flow that runs:
-
-1. MySQL in Docker
-2. migrations
-3. application container built from `Dockerfile`
-4. k6 script against the running app container
-
-Run:
+5. Avvia il servizio
 
 ```bash
-$ npm run loadtest:k6
+npm run start:dev
 ```
 
-The `loadtest:k6` script is cross-platform:
+Base URL: `http://127.0.0.1:3000`
 
-- Windows: uses `scripts/run-k6-loadtest.ps1`
-- macOS/Linux: uses `scripts/run-k6-loadtest.sh`
+## Configurazione (.env)
 
-You can also force a specific one:
+Variabili usate:
+
+```env
+PORT=3000
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=ecommerce
+```
+
+Nota: ora app e migration leggono automaticamente `.env`.
+
+## Endpoint
+
+- `POST /products`
+- `GET /products?page=1&limit=10`
+- `GET /products/:id`
+- `PUT /products/:id/stock`
+- `DELETE /products/:id`
+
+Esempi pronti all'uso: `products.http`
+
+## Test
 
 ```bash
-$ npm run loadtest:k6:win
-$ npm run loadtest:k6:mac
+npm run test
+npm run test:integration
+npm run test:e2e
+npm run test:all
 ```
 
-Key files:
+## File utili
 
-- `Dockerfile`: image used for load test runs
-- `k6/products-load.js`: k6 scenario (high-load CRUD + checks + thresholds, with growing dataset)
-- `scripts/run-k6-loadtest.ps1`: Windows orchestrator (build, run, test, cleanup)
-- `scripts/run-k6-loadtest.sh`: macOS/Linux orchestrator (build, run, test, cleanup)
-- `scripts/run-k6-loadtest.cjs`: platform-aware launcher
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- Architettura: `docs/agentic-clean-architecture-nestjs.md`
+- Migration: `migrations/20260309000100-create-products.js`
+- Model Sequelize: `src/modules/product/infrastructure/persistence/models/product.model.ts`
+- Load test: `k6/products-load.js`
+- Skills: `.github/skills/`
