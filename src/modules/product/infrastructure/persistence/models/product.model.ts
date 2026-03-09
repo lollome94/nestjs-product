@@ -1,0 +1,53 @@
+import {
+  AutoIncrement,
+  Column,
+  DataType,
+  Model,
+  PrimaryKey,
+  Table,
+  Unique,
+} from 'sequelize-typescript';
+import {
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
+import type { CreationOptional } from 'sequelize';
+
+@Table({
+  tableName: 'products',
+  timestamps: false,
+})
+export class ProductModel extends Model<
+  InferAttributes<ProductModel>,
+  InferCreationAttributes<ProductModel>
+> {
+  @PrimaryKey
+  @AutoIncrement
+  @Column(DataType.INTEGER)
+  declare id: CreationOptional<number>;
+
+  @Unique
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+  })
+  declare productToken: string;
+
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+  })
+  declare name: string;
+
+  @Column({
+    type: DataType.DECIMAL(10, 2),
+    allowNull: false,
+  })
+  declare price: string;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  declare stock: number;
+}
