@@ -61,12 +61,53 @@ $ npm run start:prod
 # unit tests
 $ npm run test
 
+# integration tests (Testcontainers + MySQL reale)
+$ npm run test:integration
+
 # e2e tests
 $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+
+# full test suite
+$ npm run test:all
 ```
+
+## Load test with k6 on Docker image
+
+The repository includes a full load-test flow that runs:
+
+1. MySQL in Docker
+2. migrations
+3. application container built from `Dockerfile`
+4. k6 script against the running app container
+
+Run:
+
+```bash
+$ npm run loadtest:k6
+```
+
+The `loadtest:k6` script is cross-platform:
+
+- Windows: uses `scripts/run-k6-loadtest.ps1`
+- macOS/Linux: uses `scripts/run-k6-loadtest.sh`
+
+You can also force a specific one:
+
+```bash
+$ npm run loadtest:k6:win
+$ npm run loadtest:k6:mac
+```
+
+Key files:
+
+- `Dockerfile`: image used for load test runs
+- `k6/products-load.js`: k6 scenario (high-load CRUD + checks + thresholds, with growing dataset)
+- `scripts/run-k6-loadtest.ps1`: Windows orchestrator (build, run, test, cleanup)
+- `scripts/run-k6-loadtest.sh`: macOS/Linux orchestrator (build, run, test, cleanup)
+- `scripts/run-k6-loadtest.cjs`: platform-aware launcher
 
 ## Deployment
 

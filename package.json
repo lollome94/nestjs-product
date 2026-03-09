@@ -20,7 +20,9 @@
     "test:all": "npm run test && npm run test:integration && npm run test:e2e",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "loadtest:k6": "powershell -ExecutionPolicy Bypass -File ./scripts/run-k6-loadtest.ps1",
+    "loadtest:k6": "node ./scripts/run-k6-loadtest.cjs",
+    "loadtest:k6:win": "powershell -ExecutionPolicy Bypass -File ./scripts/run-k6-loadtest.ps1",
+    "loadtest:k6:mac": "bash ./scripts/run-k6-loadtest.sh",
     "db:migrate": "sequelize-cli db:migrate --config config/config.cjs",
     "db:migrate:undo": "sequelize-cli db:migrate:undo --config config/config.cjs",
     "db:migrate:status": "sequelize-cli db:migrate:status --config config/config.cjs"
