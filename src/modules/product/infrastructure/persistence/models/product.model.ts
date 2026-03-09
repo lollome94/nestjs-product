@@ -7,10 +7,7 @@ import {
   Table,
   Unique,
 } from 'sequelize-typescript';
-import {
-  InferAttributes,
-  InferCreationAttributes,
-} from 'sequelize';
+import { InferAttributes, InferCreationAttributes } from 'sequelize';
 import type { CreationOptional } from 'sequelize';
 
 @Table({

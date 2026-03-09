@@ -27,9 +27,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(404);
+    return request(app.getHttpServer()).get('/').expect(404);
   });
 
   it('POST /products returns 400 for invalid payload', async () => {

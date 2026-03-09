@@ -41,7 +41,9 @@ export class SequelizeProductRepository implements ProductRepository {
     return model ? ProductMapper.toDomain(model) : null;
   }
 
-  async findByProductToken(productToken: ProductToken): Promise<Product | null> {
+  async findByProductToken(
+    productToken: ProductToken,
+  ): Promise<Product | null> {
     const model = await this.productModel.findOne({
       where: { productToken: productToken.toString() },
     });

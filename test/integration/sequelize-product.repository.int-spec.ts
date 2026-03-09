@@ -51,11 +51,14 @@ describe('SequelizeProductRepository integration', () => {
       DB_NAME: container.getDatabase(),
     };
 
-    execSync('npx sequelize-cli db:migrate --config config/config.cjs --env test', {
-      cwd: resolve(__dirname, '../..'),
-      stdio: 'inherit',
-      env,
-    });
+    execSync(
+      'npx sequelize-cli db:migrate --config config/config.cjs --env test',
+      {
+        cwd: resolve(__dirname, '../..'),
+        stdio: 'inherit',
+        env,
+      },
+    );
 
     sequelize = new Sequelize({
       dialect: 'mysql',
@@ -92,7 +95,9 @@ describe('SequelizeProductRepository integration', () => {
       makeProduct({ token: 'tok-int-1', name: 'Integration 1' }),
     );
 
-    const fetched = await repository.findById(ProductId.fromNumber(saved.id!.toNumber()));
+    const fetched = await repository.findById(
+      ProductId.fromNumber(saved.id!.toNumber()),
+    );
 
     expect(fetched).not.toBeNull();
     expect(fetched?.productToken.toString()).toBe('tok-int-1');
@@ -126,8 +131,12 @@ describe('SequelizeProductRepository integration', () => {
   it('deletes product by id', async () => {
     const saved = await repository.save(makeProduct({ token: 'tok-int-6' }));
 
-    const deleted = await repository.deleteById(ProductId.fromNumber(saved.id!.toNumber()));
-    const fetched = await repository.findById(ProductId.fromNumber(saved.id!.toNumber()));
+    const deleted = await repository.deleteById(
+      ProductId.fromNumber(saved.id!.toNumber()),
+    );
+    const fetched = await repository.findById(
+      ProductId.fromNumber(saved.id!.toNumber()),
+    );
 
     expect(deleted).toBe(true);
     expect(fetched).toBeNull();

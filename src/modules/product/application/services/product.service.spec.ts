@@ -110,7 +110,9 @@ describe('ProductService', () => {
   });
 
   it('finds a product by id', async () => {
-    repository.findById.mockResolvedValue(makeProduct({ id: 123, token: 'tok-id' }));
+    repository.findById.mockResolvedValue(
+      makeProduct({ id: 123, token: 'tok-id' }),
+    );
 
     const result = await service.getProductById(123);
 

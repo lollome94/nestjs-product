@@ -9,9 +9,7 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { PaginatedProductsDto } from '../dto/paginated-products.dto';
 import { ProductResponseDto } from '../dto/product-response.dto';
 import { UpdateStockDto } from '../dto/update-stock.dto';
-import {
-  PRODUCT_REPOSITORY,
-} from '../../domain/repositories/product.repository';
+import { PRODUCT_REPOSITORY } from '../../domain/repositories/product.repository';
 import type { ProductRepository } from '../../domain/repositories/product.repository';
 import { Product } from '../../domain/entities/product.entity';
 import { Price } from '../../domain/value-objects/price.value-object';
@@ -25,7 +23,10 @@ export interface ProductServicePort {
   createProduct(dto: CreateProductDto): Promise<ProductResponseDto>;
   getProducts(page?: number, limit?: number): Promise<PaginatedProductsDto>;
   getProductById(id: number): Promise<ProductResponseDto>;
-  updateProductStock(id: number, dto: UpdateStockDto): Promise<ProductResponseDto>;
+  updateProductStock(
+    id: number,
+    dto: UpdateStockDto,
+  ): Promise<ProductResponseDto>;
   deleteProduct(id: number): Promise<void>;
 }
 
@@ -38,7 +39,8 @@ export class ProductService implements ProductServicePort {
 
   async createProduct(dto: CreateProductDto): Promise<ProductResponseDto> {
     const productToken = ProductToken.fromString(dto.productToken);
-    const existing = await this.productRepository.findByProductToken(productToken);
+    const existing =
+      await this.productRepository.findByProductToken(productToken);
 
     if (existing) {
       throw new ConflictException('Product token already exists');
@@ -96,7 +98,9 @@ export class ProductService implements ProductServicePort {
     id: number,
     dto: UpdateStockDto,
   ): Promise<ProductResponseDto> {
-    const existing = await this.productRepository.findById(this.toProductId(id));
+    const existing = await this.productRepository.findById(
+      this.toProductId(id),
+    );
 
     if (!existing) {
       throw new NotFoundException('Product not found');
@@ -116,7 +120,9 @@ export class ProductService implements ProductServicePort {
   }
 
   async deleteProduct(id: number): Promise<void> {
-    const deleted = await this.productRepository.deleteById(this.toProductId(id));
+    const deleted = await this.productRepository.deleteById(
+      this.toProductId(id),
+    );
 
     if (!deleted) {
       throw new NotFoundException('Product not found');
