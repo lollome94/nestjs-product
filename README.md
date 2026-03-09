@@ -89,12 +89,29 @@ The project implements several testing levels to ensure code quality:
 - **Unit Tests**: Test pure logic (Entities, Value Objects, Services). Run with `npm run test`.
 - **Integration Tests**: Test interaction with the real database using **Testcontainers**. Located in [test/integration/](test/integration/). Run with `npm run test:integration`.
 - **E2E Tests**: Test the full HTTP request/response cycle. Run with `npm run test:e2e`.
-- **Load Testing**: k6 scripts for load testing in [k6/](k6/).
 
-**To run all tests:**
+**To run all standard tests:**
 ```bash
 npm run test:all
 ```
+
+### 📈 Load Testing (k6)
+The project includes [k6](https://k6.io/) load testing scripts to benchmark performance.
+
+The execution scripts ([scripts/](scripts/)) automate a full containerized environment for the test:
+1. **Infrastructure Setup**: Creates a dedicated Docker network.
+2. **Database Provisioning**: Spins up a MySQL container and waits for it to be ready.
+3. **Application Build**: Builds a temporary Docker image from the current source.
+4. **App Execution**: Runs the NestJS app container within the network and runs migrations.
+5. **Load Test Execution**: Runs a `k6` container to perform stress tests (POST, GET, PUT, DELETE operations) against the containerized application.
+6. **Cleanup**: Automatically removes all temporary containers and the network after completion.
+
+**Run Load Tests:**
+- **Cross-platform (Node/Local):** `npm run loadtest:k6` (requires local environment running)
+- **Windows (Docker-based):** `npm run loadtest:k6:win`
+- **macOS/Linux (Docker-based):** `npm run loadtest:k6:mac`
+
+Test scenarios, stages, and thresholds are defined in [k6/products-load.js](k6/products-load.js).
 
 ---
 
@@ -119,4 +136,3 @@ npm run doc:serve
 
 - **OpenSpec**: The project uses an experimental workflow based on [OpenSpec](openspec/) for managing changes via design documents, proposals, and automated tasks.
 - **Strict Mapping**: A `ProductMapper` is used to ensure domain entities never leak into DB or HTTP layers, maintaining a clear separation of concerns.
-- **Architecture Documentation**: `docs/agentic-clean-architecture-nestjs.md`

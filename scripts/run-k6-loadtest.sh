@@ -18,11 +18,17 @@ remove_container_if_exists() {
 }
 
 wait_mysql_ready() {
+  echo "Waiting for MySQL to be ready..."
   local max_attempts=30
   for ((i = 1; i <= max_attempts; i++)); do
-    if docker exec "$MYSQL_CONTAINER_NAME" mysqladmin ping -h 127.0.0.1 -uroot -pyour_password --silent >/dev/null 2>&1; then
-      return
+    if docker exec "$MYSQL_CONTAINER_NAME" mysqladmin ping -h 127.0.0.1 -uroot -pyour_password >/dev/null 2>&1; then
+      # Extra check: can we run a query on the database?
+      if docker exec "$MYSQL_CONTAINER_NAME" mysql -uroot -pyour_password -e "SELECT 1;" ecommerce >/dev/null 2>&1; then
+        echo "MySQL is ready!"
+        return
+      fi
     fi
+    echo "MySQL not ready yet (attempt $i/$max_attempts)..."
     sleep 2
   done
   echo "MySQL did not become ready in time." >&2
@@ -30,11 +36,14 @@ wait_mysql_ready() {
 }
 
 wait_app_ready_in_docker_network() {
+  echo "Waiting for Application to be ready..."
   local max_attempts=30
   for ((i = 1; i <= max_attempts; i++)); do
-    if docker run --rm --network "$NETWORK_NAME" alpine:3.21 sh -c "wget -q -O /dev/null http://${APP_CONTAINER_NAME}:3000/products?page=1\&limit=1" >/dev/null 2>&1; then
+    if docker run --rm --network "$NETWORK_NAME" alpine:3.21 sh -c "wget -T 2 -q -O- http://${APP_CONTAINER_NAME}:3000/products?page=1\&limit=1" >/dev/null 2>&1; then
+      echo "Application is ready!"
       return
     fi
+    echo "Application not ready yet (attempt $i/$max_attempts)..."
     sleep 2
   done
   echo "Application did not become ready in time." >&2

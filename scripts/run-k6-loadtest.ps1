@@ -20,14 +20,27 @@ function Remove-ContainerIfExists {
 function Wait-MySqlReady {
   param([string]$ContainerName)
 
+  Write-Host "Waiting for MySQL to be ready..."
   $maxAttempts = 30
   for ($i = 1; $i -le $maxAttempts; $i++) {
-    try {
-      docker exec $ContainerName mysqladmin ping -h 127.0.0.1 -uroot -pyour_password --silent | Out-Null
-      return
-    } catch {
-      Start-Sleep -Seconds 2
+    $currentErrorAction = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    
+    docker exec $ContainerName mysqladmin ping -h 127.0.0.1 -uroot -pyour_password 2>$null | Out-Null
+    $pingExitCode = $LASTEXITCODE
+    
+    if ($pingExitCode -eq 0) {
+      docker exec $ContainerName mysql -uroot -pyour_password -e "SELECT 1;" ecommerce 2>$null | Out-Null
+      if ($LASTEXITCODE -eq 0) {
+        $ErrorActionPreference = $currentErrorAction
+        Write-Host "MySQL is ready!"
+        return
+      }
     }
+    
+    $ErrorActionPreference = $currentErrorAction
+    Write-Host "MySQL not ready yet (attempt $i/$maxAttempts)..."
+    Start-Sleep -Seconds 2
   }
 
   throw 'MySQL did not become ready in time.'
@@ -39,16 +52,16 @@ function Wait-AppReadyInDockerNetwork {
     [string]$ContainerName
   )
 
+  Write-Host "Waiting for Application to be ready..."
   $maxAttempts = 30
   for ($i = 1; $i -le $maxAttempts; $i++) {
-    try {
-      docker run --rm --network $NetworkName alpine:3.21 wget -q -O /dev/null "http://$ContainerName`:3000/products?page=1&limit=1" | Out-Null
-      if ($LASTEXITCODE -eq 0) {
-        return
-      }
-    } catch {
-      Start-Sleep -Seconds 2
+    $result = docker run --rm --network $NetworkName alpine:3.21 sh -c "wget -T 2 -q -O- http://$ContainerName:3000/products?page=1&limit=1" 2>&1
+    if ($LASTEXITCODE -eq 0) {
+      Write-Host "Application is ready!"
+      return
     }
+    Write-Host "Application not ready yet (attempt $i/$maxAttempts)..."
+    Start-Sleep -Seconds 2
   }
 
   throw 'Application did not become ready in time.'
