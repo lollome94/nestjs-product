@@ -25,7 +25,9 @@
     "loadtest:k6:mac": "bash ./scripts/run-k6-loadtest.sh",
     "db:migrate": "sequelize-cli db:migrate --config config/config.cjs",
     "db:migrate:undo": "sequelize-cli db:migrate:undo --config config/config.cjs",
-    "db:migrate:status": "sequelize-cli db:migrate:status --config config/config.cjs"
+    "db:migrate:status": "sequelize-cli db:migrate:status --config config/config.cjs",
+    "doc:generate": "npx @compodoc/compodoc -p tsconfig.json",
+    "doc:serve": "npx @compodoc/compodoc -p tsconfig.json -s"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -42,6 +44,7 @@
     "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.2.1",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
     "@nestjs/cli": "^11.0.0",
