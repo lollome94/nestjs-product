@@ -9,4 +9,9 @@ export interface ProductRepository {
   findById(id: ProductId): Promise<Product | null>;
   findByProductToken(productToken: ProductToken): Promise<Product | null>;
   findAll(): Promise<Product[]>;
+  findPaginated(
+    offset: number,
+    limit: number,
+  ): Promise<{ items: Product[]; total: number }>;
+  deleteById(id: ProductId): Promise<boolean>;
 }

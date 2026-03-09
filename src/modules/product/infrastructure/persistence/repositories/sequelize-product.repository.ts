@@ -54,4 +54,28 @@ export class SequelizeProductRepository implements ProductRepository {
 
     return models.map((model) => ProductMapper.toDomain(model));
   }
+
+  async findPaginated(
+    offset: number,
+    limit: number,
+  ): Promise<{ items: Product[]; total: number }> {
+    const { rows, count } = await this.productModel.findAndCountAll({
+      offset,
+      limit,
+      order: [['id', 'ASC']],
+    });
+
+    return {
+      items: rows.map((model) => ProductMapper.toDomain(model)),
+      total: count,
+    };
+  }
+
+  async deleteById(id: ProductId): Promise<boolean> {
+    const deletedRows = await this.productModel.destroy({
+      where: { id: id.toNumber() },
+    });
+
+    return deletedRows > 0;
+  }
 }
