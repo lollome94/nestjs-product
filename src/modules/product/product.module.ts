@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import {
   PRODUCT_REPOSITORY,
-  ProductRepository,
-} from './domain/repositories/product.repository';
+  IProductRepository as ProductRepository,
+} from './infrastructure/persistence/repositories/sequelize-product.repository';
 import {
   PRODUCT_SERVICE,
   ProductService,

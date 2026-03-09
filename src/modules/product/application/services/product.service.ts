@@ -9,8 +9,10 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { PaginatedProductsDto } from '../dto/paginated-products.dto';
 import { ProductResponseDto } from '../dto/product-response.dto';
 import { UpdateStockDto } from '../dto/update-stock.dto';
-import { PRODUCT_REPOSITORY } from '../../domain/repositories/product.repository';
-import type { ProductRepository } from '../../domain/repositories/product.repository';
+import {
+  PRODUCT_REPOSITORY,
+  type IProductRepository as ProductRepository,
+} from '../../infrastructure/persistence/repositories/sequelize-product.repository';
 import { Product } from '../../domain/entities/product.entity';
 import { Price } from '../../domain/value-objects/price.value-object';
 import { ProductId } from '../../domain/value-objects/product-id.value-object';
@@ -19,7 +21,7 @@ import { Stock } from '../../domain/value-objects/stock.value-object';
 
 export const PRODUCT_SERVICE = 'PRODUCT_SERVICE';
 
-export interface ProductServicePort {
+export interface IProductService {
   createProduct(dto: CreateProductDto): Promise<ProductResponseDto>;
   getProducts(page?: number, limit?: number): Promise<PaginatedProductsDto>;
   getProductById(id: number): Promise<ProductResponseDto>;
@@ -31,7 +33,7 @@ export interface ProductServicePort {
 }
 
 @Injectable()
-export class ProductService implements ProductServicePort {
+export class ProductService implements IProductService {
   constructor(
     @Inject(PRODUCT_REPOSITORY)
     private readonly productRepository: ProductRepository,

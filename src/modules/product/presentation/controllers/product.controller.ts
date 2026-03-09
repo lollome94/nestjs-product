@@ -18,13 +18,13 @@ import { PaginatedProductsDto } from '../../application/dto/paginated-products.d
 import { ProductResponseDto } from '../../application/dto/product-response.dto';
 import { UpdateStockDto } from '../../application/dto/update-stock.dto';
 import { PRODUCT_SERVICE } from '../../application/services/product.service';
-import type { ProductServicePort } from '../../application/services/product.service';
+import type { IProductService } from '../../application/services/product.service';
 
 @Controller('products')
 export class ProductController {
   constructor(
     @Inject(PRODUCT_SERVICE)
-    private readonly productService: ProductServicePort,
+    private readonly productService: IProductService,
   ) {}
 
   @Post()

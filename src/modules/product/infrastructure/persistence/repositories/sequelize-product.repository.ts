@@ -1,14 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Product } from '../../../domain/entities/product.entity';
-import { ProductRepository } from '../../../domain/repositories/product.repository';
 import { ProductId } from '../../../domain/value-objects/product-id.value-object';
 import { ProductToken } from '../../../domain/value-objects/product-token.value-object';
 import { ProductMapper } from '../mappers/product.mapper';
 import { ProductModel } from '../models/product.model';
 
+export const PRODUCT_REPOSITORY = 'PRODUCT_REPOSITORY';
+
+export interface IProductRepository {
+  save(product: Product): Promise<Product>;
+  findById(id: ProductId): Promise<Product | null>;
+  findByProductToken(productToken: ProductToken): Promise<Product | null>;
+  findAll(): Promise<Product[]>;
+  findPaginated(
+    offset: number,
+    limit: number,
+  ): Promise<{ items: Product[]; total: number }>;
+  deleteById(id: ProductId): Promise<boolean>;
+}
+
 @Injectable()
-export class SequelizeProductRepository implements ProductRepository {
+export class SequelizeProductRepository implements IProductRepository {
   constructor(
     @InjectModel(ProductModel)
     private readonly productModel: typeof ProductModel,

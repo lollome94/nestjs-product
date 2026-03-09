@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
-import type { ProductRepository } from '../../domain/repositories/product.repository';
+import type { IProductRepository as ProductRepository } from '../../infrastructure/persistence/repositories/sequelize-product.repository';
 import { Product } from '../../domain/entities/product.entity';
 import { Price } from '../../domain/value-objects/price.value-object';
 import { ProductId } from '../../domain/value-objects/product-id.value-object';
