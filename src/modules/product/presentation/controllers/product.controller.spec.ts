@@ -1,10 +1,10 @@
 import { ProductController } from './product.controller';
-import { ProductService } from '../../application/services/product.service';
+import type { ProductServicePort } from '../../application/services/product.service';
 import { ProductResponseDto } from '../../application/dto/product-response.dto';
 
 describe('ProductController', () => {
   let controller: ProductController;
-  let service: jest.Mocked<ProductService>;
+  let service: jest.Mocked<ProductServicePort>;
 
   beforeEach(() => {
     service = {
@@ -13,7 +13,7 @@ describe('ProductController', () => {
       getProductById: jest.fn(),
       updateProductStock: jest.fn(),
       deleteProduct: jest.fn(),
-    } as unknown as jest.Mocked<ProductService>;
+    } as unknown as jest.Mocked<ProductServicePort>;
 
     controller = new ProductController(service);
   });

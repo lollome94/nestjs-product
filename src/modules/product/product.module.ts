@@ -4,7 +4,10 @@ import {
   PRODUCT_REPOSITORY,
   ProductRepository,
 } from './domain/repositories/product.repository';
-import { ProductService } from './application/services/product.service';
+import {
+  PRODUCT_SERVICE,
+  ProductService,
+} from './application/services/product.service';
 import { ProductModel } from './infrastructure/persistence/models/product.model';
 import { SequelizeProductRepository } from './infrastructure/persistence/repositories/sequelize-product.repository';
 import { ProductController } from './presentation/controllers/product.controller';
@@ -15,11 +18,15 @@ import { ProductController } from './presentation/controllers/product.controller
   providers: [
     ProductService,
     {
+      provide: PRODUCT_SERVICE,
+      useExisting: ProductService,
+    },
+    {
       provide: PRODUCT_REPOSITORY,
       useClass: SequelizeProductRepository,
     },
   ],
-  exports: [PRODUCT_REPOSITORY, ProductService],
+  exports: [PRODUCT_REPOSITORY, PRODUCT_SERVICE],
 })
 export class ProductModule {}
 

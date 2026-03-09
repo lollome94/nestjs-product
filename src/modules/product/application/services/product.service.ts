@@ -19,8 +19,18 @@ import { ProductId } from '../../domain/value-objects/product-id.value-object';
 import { ProductToken } from '../../domain/value-objects/product-token.value-object';
 import { Stock } from '../../domain/value-objects/stock.value-object';
 
+export const PRODUCT_SERVICE = 'PRODUCT_SERVICE';
+
+export interface ProductServicePort {
+  createProduct(dto: CreateProductDto): Promise<ProductResponseDto>;
+  getProducts(page?: number, limit?: number): Promise<PaginatedProductsDto>;
+  getProductById(id: number): Promise<ProductResponseDto>;
+  updateProductStock(id: number, dto: UpdateStockDto): Promise<ProductResponseDto>;
+  deleteProduct(id: number): Promise<void>;
+}
+
 @Injectable()
-export class ProductService {
+export class ProductService implements ProductServicePort {
   constructor(
     @Inject(PRODUCT_REPOSITORY)
     private readonly productRepository: ProductRepository,

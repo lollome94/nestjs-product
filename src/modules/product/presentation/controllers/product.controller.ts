@@ -6,6 +6,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Param,
   ParseIntPipe,
   Post,
@@ -16,11 +17,15 @@ import { CreateProductDto } from '../../application/dto/create-product.dto';
 import { PaginatedProductsDto } from '../../application/dto/paginated-products.dto';
 import { ProductResponseDto } from '../../application/dto/product-response.dto';
 import { UpdateStockDto } from '../../application/dto/update-stock.dto';
-import { ProductService } from '../../application/services/product.service';
+import { PRODUCT_SERVICE } from '../../application/services/product.service';
+import type { ProductServicePort } from '../../application/services/product.service';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    @Inject(PRODUCT_SERVICE)
+    private readonly productService: ProductServicePort,
+  ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
