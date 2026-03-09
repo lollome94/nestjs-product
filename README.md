@@ -25,6 +25,17 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Agentic Clean Architecture (NestJS)
+
+This repository now includes a NestJS-focused adaptation of Agentic Clean Architecture with DDD, explicit error handling, logging and performance guidance, Sequelize persistence boundaries, and Testcontainers testing patterns.
+
+- Main guide: [docs/agentic-clean-architecture-nestjs.md](docs/agentic-clean-architecture-nestjs.md)
+- Skills:
+  - [.github/skills/nestjs-architecture-overview/SKILL.md](.github/skills/nestjs-architecture-overview/SKILL.md)
+  - [.github/skills/nestjs-error-logging-performance/SKILL.md](.github/skills/nestjs-error-logging-performance/SKILL.md)
+  - [.github/skills/nestjs-sequelize-persistence/SKILL.md](.github/skills/nestjs-sequelize-persistence/SKILL.md)
+  - [.github/skills/nestjs-testing-testcontainers/SKILL.md](.github/skills/nestjs-testing-testcontainers/SKILL.md)
+
 ## Project setup
 
 ```bash
