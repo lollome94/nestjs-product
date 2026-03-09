@@ -24,8 +24,7 @@ export class SequelizeProductRepository implements ProductRepository {
       await this.productModel.update(values, { where: { id } });
       saved = await this.productModel.findByPk(id);
     } else {
-      const { id: _ignored, ...createValues } = values;
-      saved = await this.productModel.create(createValues);
+      saved = await this.productModel.create(values);
     }
 
     if (!saved) {

@@ -4,6 +4,11 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 
+type ValidationErrorBody = {
+  statusCode: number;
+  message: string[] | string;
+};
+
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
 
@@ -41,8 +46,9 @@ describe('AppController (e2e)', () => {
       })
       .expect(400);
 
-    expect(response.body.statusCode).toBe(400);
-    expect(Array.isArray(response.body.message)).toBe(true);
+    const body = response.body as ValidationErrorBody;
+    expect(body.statusCode).toBe(400);
+    expect(Array.isArray(body.message)).toBe(true);
   });
 
   it('POST /products returns 400 when required fields are missing', async () => {
@@ -51,8 +57,9 @@ describe('AppController (e2e)', () => {
       .send({})
       .expect(400);
 
-    expect(response.body.statusCode).toBe(400);
-    expect(Array.isArray(response.body.message)).toBe(true);
+    const body = response.body as ValidationErrorBody;
+    expect(body.statusCode).toBe(400);
+    expect(Array.isArray(body.message)).toBe(true);
   });
 
   it('PUT /products/:id/stock returns 400 for invalid stock', async () => {
@@ -61,7 +68,8 @@ describe('AppController (e2e)', () => {
       .send({ stock: -5 })
       .expect(400);
 
-    expect(response.body.statusCode).toBe(400);
-    expect(Array.isArray(response.body.message)).toBe(true);
+    const body = response.body as ValidationErrorBody;
+    expect(body.statusCode).toBe(400);
+    expect(Array.isArray(body.message)).toBe(true);
   });
 });

@@ -35,7 +35,7 @@ describe('ProductController', () => {
       stock: 2,
     });
 
-    expect(service.createProduct).toHaveBeenCalledWith({
+    expect(service.createProduct.mock.calls[0][0]).toEqual({
       name: 'Controller Product',
       productToken: 'tok-ctrl-1',
       price: 10,
@@ -57,7 +57,7 @@ describe('ProductController', () => {
 
     const result = await controller.getProducts(2, 20);
 
-    expect(service.getProducts).toHaveBeenCalledWith(2, 20);
+    expect(service.getProducts.mock.calls[0]).toEqual([2, 20]);
     expect(result.meta.page).toBe(2);
   });
 
@@ -73,7 +73,7 @@ describe('ProductController', () => {
 
     const result = await controller.getProductById(42);
 
-    expect(service.getProductById).toHaveBeenCalledWith(42);
+    expect(service.getProductById.mock.calls[0]).toEqual([42]);
     expect(result).toEqual(response);
   });
 
@@ -89,7 +89,10 @@ describe('ProductController', () => {
 
     const result = await controller.updateProductStock(2, { stock: 99 });
 
-    expect(service.updateProductStock).toHaveBeenCalledWith(2, { stock: 99 });
+    expect(service.updateProductStock.mock.calls[0]).toEqual([
+      2,
+      { stock: 99 },
+    ]);
     expect(result.stock).toBe(99);
   });
 
@@ -98,6 +101,6 @@ describe('ProductController', () => {
 
     await controller.deleteProduct(5);
 
-    expect(service.deleteProduct).toHaveBeenCalledWith(5);
+    expect(service.deleteProduct.mock.calls[0]).toEqual([5]);
   });
 });

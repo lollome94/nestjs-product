@@ -57,8 +57,8 @@ describe('ProductService', () => {
       stock: 10,
     });
 
-    expect(repository.findByProductToken).toHaveBeenCalledTimes(1);
-    expect(repository.save).toHaveBeenCalledTimes(1);
+    expect(repository.findByProductToken.mock.calls).toHaveLength(1);
+    expect(repository.save.mock.calls).toHaveLength(1);
     expect(result).toEqual({
       id: 1,
       productToken: 'tok-x',
@@ -80,7 +80,7 @@ describe('ProductService', () => {
       }),
     ).rejects.toBeInstanceOf(ConflictException);
 
-    expect(repository.save).not.toHaveBeenCalled();
+    expect(repository.save.mock.calls).toHaveLength(0);
   });
 
   it('returns paginated products', async () => {
@@ -135,7 +135,7 @@ describe('ProductService', () => {
     const result = await service.updateProductStock(7, { stock: 25 });
 
     expect(result.stock).toBe(25);
-    expect(repository.save).toHaveBeenCalledTimes(1);
+    expect(repository.save.mock.calls).toHaveLength(1);
   });
 
   it('deletes an existing product', async () => {
