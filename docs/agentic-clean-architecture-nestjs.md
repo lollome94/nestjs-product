@@ -154,3 +154,4 @@ Suggested packages:
 - structured logs with correlation context
 - tests updated for behavior changes
 - architecture checks green
+- new or changed controllers include an updated `.http` file for VS Code Rest Client

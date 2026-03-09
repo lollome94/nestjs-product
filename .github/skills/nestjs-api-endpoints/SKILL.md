@@ -32,9 +32,16 @@ Out of scope:
 - Do not expose domain entities directly.
 - Keep pagination and filtering parameters explicit.
 
+## Recommended
+
+- When creating a new controller endpoint, also create a matching `.http` file for VS Code Rest Client manual testing.
+- Keep one request block per scenario: happy path, validation error, and auth error when relevant.
+- Store `.http` files near API usage docs (for example under `requests/` or `docs/http/`) with consistent naming.
+
 ## Definition Of Done
 
 - Endpoint contract documented and consistent
 - DTO validation and transformation configured
 - HTTP status mapping aligned with global error policy
 - E2E tests cover happy path and key error path
+- Matching `.http` request file exists for manual endpoint checks
